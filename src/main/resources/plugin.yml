@@ -1,0 +1,5 @@
+main: Plugin
+name: FirstPlugin
+version: 1.0
+author: Taraj
+description: An Example plugin
