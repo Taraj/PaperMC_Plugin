@@ -1,5 +1,6 @@
 main: Plugin
 name: FirstPlugin
 version: 1.0
+api-version: 1.16
 author: Taraj
 description: An Example plugin
