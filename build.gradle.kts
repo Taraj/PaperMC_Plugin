@@ -1,6 +1,9 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     java
-    kotlin("jvm").version("1.3.72")
+    val kotlinVersion: String by System.getProperties()
+    kotlin("jvm").version(kotlinVersion)
     id("com.github.johnrengelman.shadow").version("5.2.0")
 }
 group = "tk.tarajki"
@@ -10,16 +13,22 @@ repositories {
     maven("https://papermc.io/repo/repository/maven-public/")
 }
 dependencies {
-    implementation(kotlin("stdlib", "1.3.72"))
+    val kotlinVersion: String by System.getProperties()
+    implementation(kotlin("stdlib", kotlinVersion))
     //https://papermc.io/javadocs/paper/1.16/overview-summary.html
     compileOnly("com.destroystokyo.paper", "paper-api", "1.16.1-R0.1-SNAPSHOT")
+}
+val autoRelocate by tasks.register<ConfigureShadowRelocation>("configureShadowRelocation", ConfigureShadowRelocation::class) {
+    target = tasks.getByName("shadowJar") as ShadowJar?
+    val packageName = "${project.group}.${project.name.toLowerCase()}"
+    prefix = "$packageName.shaded"
 }
 tasks {
     shadowJar {
         archiveClassifier.set("")
         project.configurations.implementation.get().isCanBeResolved = true
         configurations = listOf(project.configurations.implementation.get())
-        relocate("kotlin", "$group.src.main.kotlin")
+        dependsOn(autoRelocate)
     }
     build {
         dependsOn(shadowJar)
