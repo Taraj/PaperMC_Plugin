@@ -29,6 +29,7 @@ tasks {
         project.configurations.implementation.get().isCanBeResolved = true
         configurations = listOf(project.configurations.implementation.get())
         dependsOn(autoRelocate)
+        minimize()
     }
     build {
         dependsOn(shadowJar)
