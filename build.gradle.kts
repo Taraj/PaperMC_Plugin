@@ -16,7 +16,7 @@ dependencies {
     val kotlinVersion: String by System.getProperties()
     implementation(kotlin("stdlib", kotlinVersion))
     //https://papermc.io/javadocs/paper/1.16/overview-summary.html
-    compileOnly("com.destroystokyo.paper", "paper-api", "1.16.4-R0.1-SNAPSHOT")
+    compileOnly("com.destroystokyo.paper", "paper-api", "1.16.5-R0.1-SNAPSHOT")
 }
 val autoRelocate by tasks.register<ConfigureShadowRelocation>("configureShadowRelocation", ConfigureShadowRelocation::class) {
     target = tasks.getByName("shadowJar") as ShadowJar?
