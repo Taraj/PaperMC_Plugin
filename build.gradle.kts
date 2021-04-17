@@ -8,6 +8,11 @@ plugins {
 }
 group = "tk.tarajki"
 version = "1.0-SNAPSHOT"
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
 repositories {
     mavenCentral()
     maven("https://papermc.io/repo/repository/maven-public/")
