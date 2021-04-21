@@ -8,11 +8,6 @@ plugins {
 }
 group = "tk.tarajki"
 version = "1.0-SNAPSHOT"
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
 repositories {
     mavenCentral()
     maven("https://papermc.io/repo/repository/maven-public/")
@@ -29,6 +24,13 @@ val autoRelocate by tasks.register<ConfigureShadowRelocation>("configureShadowRe
     prefix = "$packageName.shaded"
 }
 tasks {
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_11.toString()
+        }
+        sourceCompatibility = JavaVersion.VERSION_11.toString()
+        targetCompatibility = JavaVersion.VERSION_11.toString()
+    }
     shadowJar {
         archiveClassifier.set("")
         project.configurations.implementation.get().isCanBeResolved = true
