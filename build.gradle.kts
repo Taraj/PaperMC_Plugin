@@ -24,12 +24,13 @@ val autoRelocate by tasks.register<ConfigureShadowRelocation>("configureShadowRe
     prefix = "$packageName.shaded"
 }
 tasks {
+    val javaVersion = JavaVersion.VERSION_11.toString()
     compileKotlin {
         kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_11.toString()
+            jvmTarget = javaVersion
         }
-        sourceCompatibility = JavaVersion.VERSION_11.toString()
-        targetCompatibility = JavaVersion.VERSION_11.toString()
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
     }
     shadowJar {
         archiveClassifier.set("")
