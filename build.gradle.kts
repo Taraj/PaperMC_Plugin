@@ -18,6 +18,7 @@ dependencies {
     //https://papermc.io/javadocs/paper/1.16/overview-summary.html
     compileOnly("com.destroystokyo.paper", "paper-api", "1.16.5-R0.1-SNAPSHOT")
 }
+// This can be slower than manually relocating, if that's going to be an issue manually do so instead.
 val autoRelocate by tasks.register<ConfigureShadowRelocation>("configureShadowRelocation", ConfigureShadowRelocation::class) {
     target = tasks.getByName("shadowJar") as ShadowJar?
     val packageName = "${project.group}.${project.name.toLowerCase()}"
