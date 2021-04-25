@@ -18,6 +18,17 @@ dependencies {
     //https://papermc.io/javadocs/paper/1.16/overview-summary.html
     compileOnly("com.destroystokyo.paper", "paper-api", "1.16.5-R0.1-SNAPSHOT")
 }
+val javaVersion = JavaVersion.VERSION_1_8.toString()
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+}
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions { jvmTarget = javaVersion }
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+}
 // This can be slower than manually relocating, if that's going to be an issue manually do so instead.
 val autoRelocate by tasks.register<ConfigureShadowRelocation>("configureShadowRelocation", ConfigureShadowRelocation::class) {
     target = tasks.getByName("shadowJar") as ShadowJar?
@@ -25,14 +36,6 @@ val autoRelocate by tasks.register<ConfigureShadowRelocation>("configureShadowRe
     prefix = "$packageName.shaded"
 }
 tasks {
-    val javaVersion = JavaVersion.VERSION_11.toString()
-    compileKotlin {
-        kotlinOptions {
-            jvmTarget = javaVersion
-        }
-        sourceCompatibility = javaVersion
-        targetCompatibility = javaVersion
-    }
     shadowJar {
         archiveClassifier.set("")
         project.configurations.implementation.get().isCanBeResolved = true
@@ -40,7 +43,5 @@ tasks {
         dependsOn(autoRelocate)
         minimize()
     }
-    build {
-        dependsOn(shadowJar)
-    }
+    build { dependsOn(shadowJar) }
 }
