@@ -4,7 +4,7 @@ plugins {
     java
     val kotlinVersion: String by System.getProperties()
     kotlin("jvm").version(kotlinVersion)
-    id("com.github.johnrengelman.shadow").version("6.1.0")
+    id("com.github.johnrengelman.shadow").version("7.0.0")
 }
 group = "tk.tarajki"
 version = "1.0-SNAPSHOT"
