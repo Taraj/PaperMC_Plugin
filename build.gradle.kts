@@ -4,10 +4,13 @@ plugins {
     java
     val kotlinVersion: String by System.getProperties()
     kotlin("jvm").version(kotlinVersion)
-    id("com.github.johnrengelman.shadow").version("7.0.0")
+    val shadowVersion: String by System.getProperties()
+    id("com.github.johnrengelman.shadow").version(shadowVersion)
 }
-group = "tk.tarajki"
-version = "1.0-SNAPSHOT"
+val pluginGroup: String by project
+group = pluginGroup
+val pluginVersion: String by project
+version = pluginVersion
 repositories {
     mavenCentral()
     maven("https://papermc.io/repo/repository/maven-public/")
@@ -15,8 +18,8 @@ repositories {
 dependencies {
     val kotlinVersion: String by System.getProperties()
     implementation(kotlin("stdlib", kotlinVersion))
-    //https://papermc.io/javadocs/paper/1.16/overview-summary.html
-    compileOnly("com.destroystokyo.paper", "paper-api", "1.16.5-R0.1-SNAPSHOT")
+    val paperAPIVersion: String by project
+    compileOnly("io.papermc.paper", "paper-api", paperAPIVersion)
 }
 // This can be slower than manually relocating, if that's going to be an issue manually do so instead.
 val autoRelocate by tasks.register<ConfigureShadowRelocation>("configureShadowRelocation", ConfigureShadowRelocation::class) {
@@ -25,14 +28,20 @@ val autoRelocate by tasks.register<ConfigureShadowRelocation>("configureShadowRe
     prefix = "$packageName.shaded"
 }
 tasks {
-    val javaVersion = JavaVersion.VERSION_11.toString()
+    val javaVersion = JavaVersion.VERSION_16
     withType<JavaCompile> {
         options.encoding = "UTF-8"
-        sourceCompatibility = javaVersion
-        targetCompatibility = javaVersion
+        sourceCompatibility = javaVersion.toString()
+        targetCompatibility = javaVersion.toString()
+        options.release.set(javaVersion.toString().toInt())
     }
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions { jvmTarget = javaVersion }
+        kotlinOptions { jvmTarget = javaVersion.toString() }
+        sourceCompatibility = javaVersion.toString()
+        targetCompatibility = javaVersion.toString()
+    }
+    java {
+        toolchain { languageVersion.set(JavaLanguageVersion.of(javaVersion.toString())) }
         sourceCompatibility = javaVersion
         targetCompatibility = javaVersion
     }
